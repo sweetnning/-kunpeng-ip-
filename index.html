@@ -1,1 +1,488 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=鲲鹏IP任务视图.html"></head><body></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鲲鹏IP品牌战略 · 任务视图</title>
+<style>
+  :root {
+    --bg: #f7f5f2; --surface: #fff; --text: #2c2c2c; --muted: #999;
+    --border: #e8e4dc; --radius: 8px;
+    --p0-bg: #fce4e4; --p0-text: #c0392b;
+    --p1-bg: #fef5e7; --p1-text: #b48c0b;
+    --p2-bg: #eaf7ea; --p2-text: #2e7d32;
+    --ph-frame: #e8d5d5; --ph-build: #f5ecd7; --ph-launch: #d5e8d5;
+    --shadow: 0 1px 3px rgba(0,0,0,.03), 0 3px 8px rgba(0,0,0,.04);
+    --sidebar-w: 260px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══ COVER PAGE ═══ */
+  .cover {
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; padding: 48px 24px;
+    background: linear-gradient(180deg, #f7f5f2 0%, #eeebe4 100%);
+  }
+  .cover .logo-area { margin-bottom: 40px; }
+  .cover .logo-icon {
+    width: 72px; height: 72px; border-radius: 50%; background: #3a3a4a;
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
+    font-size: 2rem; color: #d4a84b;
+  }
+  .cover h1 { font-size: 2rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 10px; color: #2c2c2c; }
+  .cover .tagline { color: var(--muted); font-size: 1rem; margin-bottom: 8px; }
+  .cover .meta { color: #bbb; font-size: 0.85rem; margin-bottom: 48px; }
+  .cover .nav-cards { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .cover .nav-card {
+    background: #fff; border-radius: 12px; padding: 32px 36px; width: 260px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04), 0 8px 24px rgba(0,0,0,.06);
+    cursor: pointer; transition: .2s; text-align: left; text-decoration: none; color: inherit;
+    border: 1px solid transparent;
+  }
+  .cover .nav-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,.08), 0 16px 40px rgba(0,0,0,.08); border-color: #d4a84b; }
+  .cover .nav-card .nc-icon { font-size: 1.6rem; margin-bottom: 12px; }
+  .cover .nav-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .cover .nav-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+  .cover .stats-line { display: flex; gap: 20px; margin-top: 48px; flex-wrap: wrap; justify-content: center; }
+  .cover .stat-badge {
+    padding: 8px 20px; border-radius: 50px; font-size: 0.82rem; font-weight: 600;
+    background: #fff; box-shadow: var(--shadow);
+  }
+
+  /* ═══ APP LAYOUT ═══ */
+  .app { display: none; min-height: 100vh; }
+  .app.active { display: flex; }
+  .cover.hidden { display: none; }
+
+  .sidebar {
+    width: var(--sidebar-w); flex-shrink: 0; background: #2c2c38; color: #ccc;
+    padding: 20px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .sidebar .sb-header {
+    padding: 0 18px 14px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 8px;
+  }
+  .sidebar .sb-header .sb-title { color: #fff; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; }
+  .sidebar .group-nav { list-style: none; flex: 1; }
+  .sidebar .group-nav li a {
+    display: flex; align-items: center; gap: 8px; padding: 10px 18px; color: #aaa;
+    text-decoration: none; font-size: 0.84rem; transition: .12s;
+    border-left: 3px solid transparent;
+  }
+  .sidebar .group-nav li a .sdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .sidebar .group-nav li a:hover { color: #fff; background: rgba(255,255,255,.04); }
+  .sidebar .group-nav li a.active { color: #fff; background: rgba(255,255,255,.06); border-left-color: #d4a84b; }
+  .sidebar .sb-footer {
+    padding: 16px 18px; border-top: 1px solid rgba(255,255,255,.08);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .home-btn {
+    background: none; border: 1px solid rgba(255,255,255,.15); border-radius: 8px;
+    width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #999; transition: .15s;
+  }
+  .home-btn:hover { color: #d4a84b; border-color: #d4a84b; background: rgba(212,168,75,.08); }
+  .sb-footer span { font-size: 0.75rem; color: #666; }
+
+  .main { flex: 1; padding: 32px 40px; max-width: 840px; overflow-y: auto; }
+
+  /* Tab header */
+  .tab-header { margin-bottom: 28px; }
+  .tab-header .tag-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .tab-header .gdot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .tab-header h2 { font-size: 1.25rem; font-weight: 700; }
+  .tab-header .role { color: var(--muted); font-size: 0.85rem; }
+
+  /* Stats row */
+  .stats-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .stat-pill { padding: 4px 12px; border-radius: 50px; font-size: 0.76rem; font-weight: 600; }
+  .sp0 { background: var(--p0-bg); color: var(--p0-text); }
+  .sp1 { background: var(--p1-bg); color: var(--p1-text); }
+  .sp2 { background: var(--p2-bg); color: var(--p2-text); }
+  .sph-f { background: var(--ph-frame); color: #8b5050; }
+  .sph-b { background: var(--ph-build); color: #8b7355; }
+  .sph-l { background: var(--ph-launch); color: #507050; }
+  .btn-expand {
+    margin-left: auto; padding: 5px 16px; border-radius: 50px; border: 1px solid #ddd;
+    background: #fff; cursor: pointer; font-size: 0.78rem; transition: .12s;
+  }
+  .btn-expand:hover { background: #f5f5f5; }
+
+  /* Cards */
+  .cards { display: flex; flex-direction: column; gap: 10px; }
+  .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); cursor: pointer; transition: .12s; }
+  .card:hover { box-shadow: 0 2px 6px rgba(0,0,0,.06); }
+  .card-row { display: flex; align-items: center; padding: 14px 18px; gap: 10px; user-select: none; }
+  .card-row .pri { width: 22px; height: 22px; border-radius: 50%; text-align: center; line-height: 22px; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+  .pri0 { background: var(--p0-bg); color: var(--p0-text); } .pri1 { background: var(--p1-bg); color: var(--p1-text); } .pri2 { background: var(--p2-bg); color: var(--p2-text); }
+  .card-row .phase-tag { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 50px; flex-shrink: 0; }
+  .ph-tag-f { background: var(--ph-frame); color: #8b5050; } .ph-tag-b { background: var(--ph-build); color: #8b7355; } .ph-tag-l { background: var(--ph-launch); color: #507050; }
+  .card-row .title { flex: 1; font-weight: 600; font-size: 0.92rem; min-width: 0; }
+  .card-row .out { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 50px; flex-shrink: 0; }
+  .out-self { background: #eaf7ea; color: #507050; } .out-mix { background: #fef5e7; color: #8b7355; } .out-outsource { background: #fce4e4; color: #8b5050; }
+  .card-row .dl { font-weight: 600; font-size: 0.85rem; flex-shrink: 0; text-align: right; min-width: 64px; }
+  .card-row .arrow { color: #ccc; font-size: 0.7rem; flex-shrink: 0; }
+  .card.open .card-row .arrow { transform: rotate(180deg); }
+  .card-body { display: none; padding: 0 18px 16px; margin: 0 18px; border-top: 1px solid var(--border); }
+  .card.open .card-body { display: block; }
+  .card-body .desc { font-size: 0.86rem; color: #555; line-height: 1.7; margin: 12px 0 8px; }
+  .card-body .xtags { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.8rem; color: var(--muted); }
+
+  /* ═══ MINDMAP PAGE ═══ */
+  .mindmap-page { display: none; min-height: 100vh; background: #f7f5f2; padding: 32px; }
+  .mindmap-page.active { display: block; }
+  .mindmap-page .mm-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+  .mindmap-page .mm-back {
+    padding: 8px 20px; border-radius: 50px; border: 1px solid #ddd; background: #fff;
+    cursor: pointer; font-size: 0.85rem; transition: .12s;
+  }
+  .mindmap-page .mm-back:hover { background: #f0f0f0; }
+  .mindmap-page h2 { font-size: 1.3rem; }
+
+  .tree { max-width: 1100px; margin: 0 auto; }
+  .tree ul { list-style: none; }
+  .tree .tb { margin-left: 32px; border-left: 2px solid #e0dcd4; padding-left: 20px; }
+
+  .tree .tn {
+    display: flex; align-items: center; gap: 8px; padding: 6px 0; cursor: pointer; user-select: none;
+    transition: .1s;
+  }
+  .tree .tn:hover { opacity: 0.8; }
+  .tree .tn .toggle { width: 18px; height: 18px; border-radius: 50%; border: 1px solid #ccc; text-align: center; line-height: 16px; font-size: 10px; color: #999; flex-shrink: 0; background: #fff; transition: .12s; }
+  .tree .tn.open .toggle { background: #3a3a4a; border-color: #3a3a4a; color: #fff; }
+  .tree .tn .tn-label { font-weight: 600; font-size: 0.9rem; }
+  .tree .tn .tn-note { font-size: 0.78rem; color: #999; margin-left: 4px; }
+
+  .tree .tn-root { font-size: 1.1rem; font-weight: 800; padding: 10px 0; }
+  .tree .tn-root .tn-dot { width: 12px; height: 12px; border-radius: 50%; background: #d4a84b; flex-shrink: 0; }
+
+  .tree .leaf { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; margin: 2px 4px; border-radius: 50px; font-size: 0.78rem; font-weight: 500; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.04); cursor: default; }
+  .tree .leaf .lp { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .lp0 { background: var(--p0-text); } .lp1 { background: var(--p1-text); } .lp2 { background: var(--p2-text); }
+  .leaf .ld { color: #999; font-size: 0.7rem; margin-left: 2px; }
+  .tree .children { display: none; }
+  .tree .children.show { display: block; }
+
+  .tree .gbox {
+    display: inline-block; padding: 6px 14px; border-radius: 6px; margin: 4px 0;
+    font-weight: 700; font-size: 0.88rem;
+  }
+
+  /* Mobile floating home */
+  .mobile-home {
+    display: none; position: fixed; bottom: 20px; left: 20px; z-index: 300;
+    width: 42px; height: 42px; border-radius: 50%; background: #3a3a4a;
+    color: #d4a84b; border: none; cursor: pointer; font-size: 1.1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,.2); align-items: center; justify-content: center;
+  }
+  @media (max-width: 768px) {
+    .mobile-home { display: flex; }
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: static; padding: 10px 14px; }
+    .sidebar .group-nav { display: flex; overflow-x: auto; gap: 2px; }
+    .sidebar .group-nav li a { border-left: none; border-bottom: 2px solid transparent; white-space: nowrap; padding: 8px 10px; font-size: 0.74rem; }
+    .sidebar .group-nav li a.active { border-left: none; border-bottom-color: #d4a84b; }
+    .main { padding: 18px 14px; }
+    .cover h1 { font-size: 1.4rem; }
+    .cover .nav-cards { flex-direction: column; align-items: center; }
+    .tree .tb { margin-left: 16px; padding-left: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ COVER ═══════════ -->
+<div class="cover" id="coverPage">
+  <div class="logo-area">
+    <div class="logo-icon"><svg width="36" height="36" viewBox="0 0 36 36"><circle cx="18" cy="6" r="3" fill="#d4a84b"/><circle cx="28" cy="24" r="3" fill="#d4a84b"/><circle cx="8" cy="24" r="3" fill="#d4a84b"/><line x1="18" y1="6" x2="28" y2="24" stroke="#d4a84b" stroke-width="0.8" opacity="0.4"/><line x1="28" y1="24" x2="8" y2="24" stroke="#d4a84b" stroke-width="0.8" opacity="0.4"/><line x1="8" y1="24" x2="18" y2="6" stroke="#d4a84b" stroke-width="0.8" opacity="0.4"/></svg></div>
+    <h1>鲲鹏IP品牌战略</h1>
+    <p class="tagline">深圳科技馆（光明新馆）· 品牌落地执行任务视图</p>
+    <p class="meta">2026年5月 · 18个月 · 8个工作组 · 34项核心任务</p>
+  </div>
+  <div class="nav-cards">
+    <div class="nav-card" onclick="showApp()">
+      <div class="nc-icon">📋</div>
+      <h3>分组任务卡片</h3>
+      <p>8个工作组详细任务清单，含优先级、截止日期、交付物、协作关系。点击卡片展开详情。</p>
+    </div>
+    <div class="nav-card" onclick="showMindmap()">
+      <div class="nc-icon">🗺</div>
+      <h3>项目全景导图</h3>
+      <p>树状结构总览：各组的角色定位与核心任务分布，适合快速了解项目全局。</p>
+    </div>
+  </div>
+  <div class="stats-line">
+    <span class="stat-badge" style="background:#fce4e4;color:#c0392b;">P0 紧急 · 10项</span>
+    <span class="stat-badge" style="background:#fef5e7;color:#b48c0b;">P1 重要 · 16项</span>
+    <span class="stat-badge" style="background:#eaf7ea;color:#2e7d32;">P2 常规 · 8项</span>
+    <span class="stat-badge" style="background:#fff;">📅 2026.05 — 2027.10</span>
+  </div>
+</div>
+
+<!-- ═══════════ APP (TASK CARDS) ═══════════ -->
+<div class="app" id="appView">
+  <button class="mobile-home" onclick="showCover()" title="返回扉页">🏠</button>
+  <nav class="sidebar">
+    <div class="sb-header">
+      <div class="sb-title">鲲鹏IP · 任务视图</div>
+    </div>
+    <ul class="group-nav" id="groupNav">
+      <li><a href="#" data-group="0" class="active"><span class="sdot" style="background:#5b8db8"></span>品牌传播组</a></li>
+      <li><a href="#" data-group="1"><span class="sdot" style="background:#c8965c"></span>运营管理组</a></li>
+      <li><a href="#" data-group="2"><span class="sdot" style="background:#6b9960"></span>外拓管理组</a></li>
+      <li><a href="#" data-group="3"><span class="sdot" style="background:#5a9a5a"></span>影院营销组</a></li>
+      <li><a href="#" data-group="4"><span class="sdot" style="background:#6b78b8"></span>科教研发组</a></li>
+      <li><a href="#" data-group="5"><span class="sdot" style="background:#8b6eb8"></span>科转活动组</a></li>
+      <li><a href="#" data-group="6"><span class="sdot" style="background:#b86b6b"></span>综合管理组</a></li>
+      <li><a href="#" data-group="7"><span class="sdot" style="background:#888"></span>智慧运营组</a></li>
+    </ul>
+    <div class="sb-footer">
+      <button class="home-btn" onclick="showCover()" title="返回扉页">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
+      </button>
+      <span>返回扉页</span>
+    </div>
+  </nav>
+  <main class="main" id="mainContent"></main>
+</div>
+
+<!-- ═══════════ MINDMAP PAGE ═══════════ -->
+<div class="mindmap-page" id="mindmapPage">
+  <button class="mobile-home" onclick="showCover()" title="返回扉页">🏠</button>
+  <div class="mm-header">
+    <button class="mm-back" onclick="showCover()">← 返回扉页</button>
+    <h2>项目全景导图</h2>
+    <span style="color:var(--muted);font-size:0.85rem;">点击节点展开/折叠 · 颜色区分优先级</span>
+    <button class="btn-expand" onclick="expandAll()" style="margin-left:auto;">展开全部</button>
+  </div>
+  <div class="tree" id="treeContainer"></div>
+</div>
+
+<script>
+// ═══ DATA ═══
+const absMonth = m => { const d=new Date(2026,4+m-1,1); return d.getFullYear()+'年'+(d.getMonth()+1)+'月'; };
+
+const groups = [
+  { name:'品牌传播组', role:'品牌体系核心输出方 · 归口品牌宣传部 · 品牌传播组组长（品牌建设岗+宣传推广岗+舆情管理岗）',
+    color:'#dce8f5', dotColor:'#5b8db8',
+    tasks:[
+      {pri:'P0',title:'品牌定位白皮书编制',out:'自做',mo:3,phase:'框架期',desc:'明确深圳科技馆在城市文明版图中的位置——"深圳创新精神的物化载体、中国科技馆的南方范式"。构建三层价值金字塔（科普教育入口→科技创新认证→城市精神象征）。融合林书记指示+领导概念方案。内部调研→组领导审→项目总负责人审→馆领导终审签字。',deliverable:'《品牌定位白皮书》（馆领导签批版）+ 参考资料包',collab:'综合管理组'},
+      {pri:'P0',title:'品牌话语体系构建',out:'部分外包',mo:4,phase:'框架期',desc:'四大模块：品牌宣言500字（鲲鹏号第一人称叙事长文）、品牌关键词库（必用词/推荐词/禁用词三级分类100+词条）、品牌故事框架（破茧→展翅→巡宇三重叙事）、禁用词清单。另编制对外话术模板30秒/3分钟/10分钟三版本。全馆宣贯培训。',deliverable:'《品牌叙事手册》V1.0 + 话术模板 + 宣贯PPT',collab:'文案策划公司（外包润色）'},
+      {pri:'P1',title:'鲲鹏IP世界观框架搭建',out:'部分外包',mo:4,phase:'框架期',desc:'基于林书记"鲲鹏/大飞船/科技宠物"三核心概念。宇宙来源1500字+角色谱系3000字+使命叙事800字+品牌叙事长文500字。框架期定方向，建设期编剧外包填充细节。',deliverable:'《鲲鹏世界观框架白皮书》+ 视觉方向描述',collab:'科教研发组（学术支撑）+ 编剧工作室（外包）'},
+      {pri:'P1',title:'品牌视觉方向定调+VI招标准备',out:'自做',mo:4,phase:'框架期',desc:'框架期不做完整VI（建设期外包），只定方向：三套色板方案+鲲鹏符号三变体草图方向+辅助图形系统+字体方向。撰写VI设计招标需求书。调研对标三星堆/TeamLab/深圳城市视觉。',deliverable:'《品牌视觉方向提案》+ VI招标需求书',collab:'VI设计公司（第4月招标→第5月定标）'},
+      {pri:'P1',title:'品牌治理架构搭建+商标注册启动',out:'部分外包',mo:3,phase:'框架期',desc:'编制三层决策链架构图（馆方品牌委员会→深圳科普品牌中台→项目工作组）。品牌权责清单逐项列明审核层级和决策人。商标注册清单：鲲鹏/鲲鹏学院/领航员/守护者等核心商标+至少8个类别。',deliverable:'《品牌治理架构图》+ 权责清单 + 商标清单',collab:'综合管理组 + 知识产权代理（外包）'},
+      {pri:'P2',title:'品牌VI全套设计（建设期外包）',out:'外包',mo:9,phase:'建设期',desc:'建设期第5月启动：完整VI系统（Logo定稿/辅助图形/色彩系统/字体规范/应用规范）+主题图库系统。第5月定标→第7月VI交付→第9月图库交付。',deliverable:'《品牌VI系统》全套 + 主题图库V1.0',collab:'VI设计公司（外包）'},
+      {pri:'P1',title:'品牌内容生产（动画+表情包+专栏）',out:'外包',mo:10,phase:'建设期',desc:'首支动画《鲲鹏来源》60s（脚本→分镜→制作→成片）、科学宠物表情包16-24个（设计→微信审核→上线）、鲲鹏日志科普专栏前20期内容储备（每期800字+3插画）。内容审核流程建立。',deliverable:'动画成片 + 表情包专辑 + 专栏20期储备',collab:'动画公司+表情包设计师（外包）+科教研发组（审核）'},
+      {pri:'P0',title:'品牌之夜年度发布会',out:'外包',mo:18,phase:'落地期',desc:'年度品牌发布会：品牌报告+年度动画首映+新内容预告+联名计划官宣+研学成果展示。嘉宾≥200人（政府/媒体/KOL/合作伙伴/专家）。现场体验区+产品展示+互动装置。前期预热1个月+现场直播+后期发酵。',deliverable:'品牌之夜执行 + 媒体报道≥30家',collab:'活动策划公司（外包）+外拓管理组+科转活动组'},
+    ]},
+  { name:'运营管理组', role:'场馆品牌化落地执行主体 · 归口运营管理部 · 运营管理组负责人（展厅运营岗+接待讲解岗+场馆保障岗）',
+    color:'#fde8d0', dotColor:'#c8965c',
+    tasks:[
+      {pri:'P1',title:'场馆品牌化改造需求梳理',out:'自做',mo:4,phase:'框架期',desc:'逐层勘查深圳科技馆（B1-6F），识别鲲鹏元素落位点。激光测距仪精确测量各点位尺寸，标注施工限制条件（承重/消防/用电/物业规定）。输出需求规格书。❓空间运营开发部归口待确认。',deliverable:'《场馆品牌化改造需求规格书》+ 尺寸测量表 + 限制清单',collab:'❓空间运营开发部（待确认）'},
+      {pri:'P2',title:'服务人员品牌化需求梳理',out:'自做',mo:4,phase:'框架期',desc:'全面摸底各岗位服务人员数量（讲解50-80人/安保30-50人/清洁30-40人/票务15-20人）和现有体系。输出角色/服装/话术/行为准则/培训需求规格。',deliverable:'《服务品牌化需求清单》+ 各岗位人员统计表',collab:'品牌传播组（话语体系支撑）'},
+      {pri:'P0',title:'场馆品牌化改造设计+打样',out:'外包',mo:10,phase:'建设期',desc:'启动空间设计招标→编制《场馆场景应用规范》（每个点位鲲鹏元素融入方式+尺寸/规格+色彩绑定）→首批10项物料设计→打样+上墙验证。❓需与空间部协调施工审批。',deliverable:'《场馆场景应用规范》+ 10项物料设计图+打样',collab:'空间导视设计公司+展览设计公司+标识制作公司（外包）'},
+      {pri:'P0',title:'服务品牌手册编制+全员培训准备',out:'部分外包',mo:8,phase:'建设期',desc:'四角色定稿：领航员（讲解）/守护者（安保+清洁）/登船接待员（票务）。四季服装设计方案。话术体系编写（迎宾/指引/互动/道别/投诉回应）。行为准则（微笑/蹲姿/手势/应急）。培训PPT+考核方案。',deliverable:'《服务品牌手册》全册 + 四季服装设计图+样衣 + 话术卡 + 培训PPT',collab:'职业装设计公司+服务设计顾问（外包）'},
+      {pri:'P0',title:'场馆品牌化改造全面落地',out:'外包',mo:15,phase:'落地期',desc:'10项物料进场安装→各楼层鲲鹏元素全面落地（电梯贴膜/洗手间标识/休息区装置/导视/微型装置库）→全馆品牌空间初验→整改→终验。需提前报安全/消防审批。夜间/闭馆施工。',deliverable:'全馆品牌空间落地验收报告 + 观众打卡率数据',collab:'展览设计公司+标识制作公司+装置公司+印刷供应商（外包）'},
+      {pri:'P0',title:'服务品牌化全面落地+全员考核',out:'部分外包',mo:14,phase:'落地期',desc:'全员品牌角色培训（理论+实操）→考核（通过率≥90%方可上岗）→四季服装批量配发→话术执行启动+神秘访客月度抽查（执行率≥85%持续提升）。服务品牌化月度复盘+优化。',deliverable:'全员考核通过率≥90% + 话术执行率≥85% + 月度报告',collab:'培训机构（讲师可选）'},
+    ]},
+  { name:'外拓管理组', role:'商业价值变现与市场拓展主体 · 归口市场拓展部 · 外拓管理组负责人（商业招商岗+票务营销岗+文创运营岗+临展运营岗）',
+    color:'#dcefd4', dotColor:'#6b9960',
+    tasks:[
+      {pri:'P2',title:'商业生态初步规划',out:'自做',mo:4,phase:'框架期',desc:'场馆商业空间规划方向（核心店/城市店/线上店分级）。票务体系+会员体系框架。潜在联名品牌清单（华为/大疆/腾讯/光明三宝等）。合作模式初步设计（采购制/联名制/授权制）。',deliverable:'《商业生态初步规划》+ 联名品牌清单',collab:'品牌传播组（品牌调性对齐）'},
+      {pri:'P1',title:'渠道体系搭建+机场店设计',out:'部分外包',mo:10,phase:'建设期',desc:'核心店商业规划定稿。机场文创店可行性+设计方案（深圳科技文化快闪窗口）。线上店平台搭建。首批联名品牌正式洽谈（目标3-5家签约）。',deliverable:'核心店规划 + 机场店设计 + 线上平台 + 联名签约≥3家',collab:'零售设计顾问+电商平台开发商（外包）'},
+      {pri:'P1',title:'产品矩阵首批开发',out:'部分外包',mo:10,phase:'建设期',desc:'三级矩阵：引流款（徽章/钥匙扣/贴纸/帆布袋）+利润款（科学实验套装/AR绘本/拼装模型）+形象款概念（艺术家联名雕塑/限量礼盒）。包装系统设计+产品故事卡。',deliverable:'引流款5-8SKU + 利润款3-5SKU + 包装+故事卡',collab:'文创产品设计公司+生产供应商+包装设计公司（外包）'},
+      {pri:'P0',title:'产品上市+渠道全面运营',out:'部分外包',mo:15,phase:'落地期',desc:'首批产品正式销售→核心店/城市店/线上店全面运营→机场文创店施工+开业→联名产品正式发布→票务+会员体系正式运营→销售数据月度复盘。',deliverable:'销售数据 + 各渠道运营报告 + 机场店开业',collab:'供应链/生产商+渠道合作方'},
+    ]},
+  { name:'影院营销组', role:'6大影院专属运营主体 · 归口市场拓展部 · 影院营销组负责人（片源排期岗+放映运维岗+营销服务岗）',
+    color:'#d0f0d0', dotColor:'#5a9a5a',
+    tasks:[
+      {pri:'P2',title:'影院品牌化方案编制',out:'自做',mo:4,phase:'框架期',desc:'6大影院品牌化方案：入口大飞船舱门造型设计方向+排期电子屏飞船仪表盘UI+开场提示动画领航员安全须知+座椅头枕套鲲鹏星座刺绣。片源选购品牌调性对齐。',deliverable:'《影院品牌化方案》+ 入口设计方向',collab:'品牌传播组（VI/视觉规范）'},
+      {pri:'P2',title:'影院品牌化落地',out:'外包',mo:15,phase:'落地期',desc:'6大影院品牌化实施：舱门造型制作安装+排期屏UI上线+开场动画制作+座椅头枕套制作。观众服务品牌化：售票话术融入登船接待员+入场引导领航员手势+散场道别语统一。',deliverable:'6大影院品牌化落地验收 + 观众满意度',collab:'展览设计公司+动画公司（外包）'},
+    ]},
+  { name:'科教研发组', role:'科普核心内容生产主体 · 归口展教研发部 · 科教研发组负责人（课程研发岗+研学运营岗+馆校合作岗）',
+    color:'#dce0f5', dotColor:'#6b78b8',
+    tasks:[
+      {pri:'P1',title:'研学品牌框架+内容分级体系规划',out:'自做',mo:4,phase:'框架期',desc:'鲲鹏学院研学品牌框架：分龄分级（启蒙4-7/探索8-12/领航13-18）。2条标杆路线（一日航天工程师/AI创客营）。内容分级体系：品牌级→科普级→产品级。四大知识域知识点清单（航天/生命/AI/海洋，每域10-15个知识点）。',deliverable:'《鲲鹏学院框架》+《内容分级框架》+ 知识点清单',collab:'品牌传播组（品牌调性对齐）'},
+      {pri:'P0',title:'鲲鹏学院课程开发+导师认证体系',out:'部分外包',mo:10,phase:'建设期',desc:'三级课程教案11课时+2条标杆路线详细教案+教具开发+导师认证标准（条件/考核/等级晋升）+证书体系设计。课程框架内部把控，教具开发可外包。',deliverable:'11课时教案 + 路线教案 + 认证标准 + 教具样品',collab:'研学课程开发机构+教具开发公司（部分外包）'},
+      {pri:'P1',title:'首批专家IP签约+首场科学讲坛',out:'自做',mo:8,phase:'建设期',desc:'梳理深圳/大湾区专家候选名单≥30人。馆领导+科教研发组共同拜访签约，目标首批≥10位。首场"鲲鹏科学讲坛"举办。专家个人品牌页制作+专家库系统搭建。',deliverable:'签约≥10位 + 首场讲坛视频 + 专家品牌页',collab:'馆领导（关键专家关系协调）'},
+      {pri:'P2',title:'鲲鹏日志科普专栏内容储备',out:'自做',mo:10,phase:'建设期',desc:'提前储备前20期内容（避免发布赶工）。每期800字+3张插画需求。四大知识域配比均衡。建立科普内容审核绿色通道。',deliverable:'前20期初稿 + 插画需求×20 + 审核SOP',collab:'插画师（外包）+品牌传播组（发布）'},
+      {pri:'P0',title:'鲲鹏学院正式运营+活动常态化',out:'部分外包',mo:16,phase:'落地期',desc:'学院开课→首期内测（100组家庭）→数据复盘→规模化。科学讲坛月度化运营。馆校合作体系正式运营（累计签约≥20所）。研学安全预案+保险到位。',deliverable:'学院运营数据 + 讲坛排期 + 馆校合作≥20所',collab:'科转活动组（活动协同）+运营管理组（现场保障）'},
+    ]},
+  { name:'科转活动组', role:'重大活动与科技成果转化执行主体 · 归口展教研发部 · 科转活动组负责人（重大活动岗+科转对接岗+内容创作岗）',
+    color:'#e8ddf0', dotColor:'#8b6eb8',
+    tasks:[
+      {pri:'P2',title:'重大活动前期规划',out:'自做',mo:4,phase:'框架期',desc:'AI创作大赛方案（基于林书记指示：IP设计/视频/故事三赛道）。开馆/重大节点活动策划方向。鲲鹏科学嘉年华概念方案。科转对接：启动高新企业/科研院所走访计划。',deliverable:'《重大活动三年规划框架》+ AI大赛初步方案',collab:'品牌传播组（活动品牌调性对齐）'},
+      {pri:'P1',title:'活动体系搭建+独立展位方案',out:'部分外包',mo:10,phase:'建设期',desc:'AI大赛方案深化+执行准备（三赛道/评委/流程）。嘉年华详细方案（实验秀+创客市集+院士公开课+IP发布夜）。独立展位参展方案（高交会/文博会）。UGC共创方案。科转对接走访10家。',deliverable:'AI大赛方案 + 嘉年华方案 + 展位方案 + 科转意向≥5家',collab:'展览搭建公司+活动策划公司（外包）+品牌传播组'},
+      {pri:'P1',title:'活动集中执行+科转成果落地',out:'部分外包',mo:16,phase:'落地期',desc:'AI创作大赛正式执行（征集→评审→颁奖→展览）。嘉年华举办。独立展位参展。科幻画大赛+获奖作品展。UGC持续运营。科转成果展示落地共创空间。',deliverable:'AI大赛参赛≥1000件 + 嘉年华执行 + 展位参展',collab:'活动执行公司+赛事运营公司（外包）'},
+    ]},
+  { name:'综合管理组', role:'行政/人事/财务/品控中枢 · 归口综合管理部 · 综合管理组负责人（行政后勤岗+人事财务岗+品控督办岗）',
+    color:'#f5dcdc', dotColor:'#b86b6b',
+    tasks:[
+      {pri:'P0',title:'制度资产申报启动+项目立项',out:'自做',mo:4,phase:'框架期',desc:'三项申报：全国科普教育基地+国家级研学实践营地+深圳城市文化名片。品牌项目立项书编制+审批（深圳科普→博汇→事业单位→科协）。KPI考核框架：每组至少3个品牌相关KPI。',deliverable:'三份申报材料 + 项目立项书 + KPI框架',collab:'申报咨询机构（外包辅导）'},
+      {pri:'P1',title:'商标跟进+危机预案+人才规划',out:'部分外包',mo:4,phase:'框架期',desc:'商标代理招标→第一批提交（核心商标+8类别全门类注册）。品牌危机预案框架（四类风险→红橙黄三级响应→各场景第一响应人）。品牌总监JD+招聘。品牌传播组增编评估。',deliverable:'商标受理 + 危机预案框架 + 品牌总监JD',collab:'知识产权代理公司（外包）'},
+      {pri:'P1',title:'制度资产跟进+商标矩阵+危机预案',out:'部分外包',mo:8,phase:'建设期',desc:'跟进三项申报审批进度→准备补充材料。商标第二批提交（备用名称/防御性注册）。品牌危机预案完整版+桌面演练。品牌总监到岗（目标第8月前）。商标台账持续更新。',deliverable:'申报进度报告 + 商标台账 + 危机预案完整版',collab:'知识产权代理+申报咨询机构（外包）'},
+    ]},
+  { name:'智慧运营组', role:'信息化与智能化技术支撑主体 · 归口信息技术部 · 智慧运营组负责人（系统建设岗+运维技术岗+网络安全岗）',
+    color:'#e8e8e8', dotColor:'#888',
+    tasks:[
+      {pri:'P2',title:'数字内容技术底座规划',out:'自做',mo:4,phase:'框架期',desc:'展厅动画播放系统技术方案。AR互动墙技术方案。数据收集与分析平台方案。各系统接口标准制定（避免各承包商系统不兼容）。',deliverable:'《数字内容技术底座方案》+ 硬件选型 + 接口标准',collab:'AR技术公司（咨询）'},
+      {pri:'P1',title:'数字内容平台建设+AR开发',out:'部分外包',mo:10,phase:'建设期',desc:'展厅播放系统部署（硬件+软件+调试）。AR互动墙开发+部署（创意由品牌传播组把控，技术外包）。数据看板搭建。线上内容平台搭建。表情包后台对接。等保合规。',deliverable:'播放系统 + AR互动墙 + 数据看板 + 线上平台',collab:'AR技术公司+软件开发公司+硬件供应商'},
+      {pri:'P1',title:'全馆数字体验运营+数据驱动优化',out:'自做',mo:18,phase:'落地期',desc:'AR互动墙运营数据监测→使用率分析→优化建议。展厅播放系统运维（日常维护+故障处置+内容更新）。数据看板日常运营→月度报告分发各组。线上平台持续迭代。等保合规持续达标。',deliverable:'月度数据运营报告 + 运维日志 + 优化建议书',collab:'品牌传播组（内容更新）+运营管理组（场景优化）'},
+    ]},
+];
+
+// ═══ HELPERS ═══
+const phaseLabel = p => p==='框架期'?'框架':(p==='建设期'?'建设':'落地');
+const phaseTagClass = p => p==='框架期'?'ph-tag-f':(p==='建设期'?'ph-tag-b':'ph-tag-l');
+const outClass = o => o==='自做'?'out-self':(o==='外包'?'out-outsource':'out-mix');
+
+// ═══ COVER NAVIGATION ═══
+function showApp() {
+  document.getElementById('coverPage').classList.add('hidden');
+  document.getElementById('appView').classList.add('active');
+  document.getElementById('mindmapPage').classList.remove('active');
+  renderGroup(activeGroup);
+}
+function showMindmap() {
+  document.getElementById('coverPage').classList.add('hidden');
+  document.getElementById('appView').classList.remove('active');
+  document.getElementById('mindmapPage').classList.add('active');
+  renderMindmap();
+}
+function showCover() {
+  document.getElementById('coverPage').classList.remove('hidden');
+  document.getElementById('appView').classList.remove('active');
+  document.getElementById('mindmapPage').classList.remove('active');
+}
+
+// ═══ TASK CARDS ═══
+let activeGroup = 0;
+
+function renderGroup(idx) {
+  const g = groups[idx];
+  const phaseCount = {框架期:0,建设期:0,落地期:0};
+  g.tasks.forEach(t=>{ if(phaseCount[t.phase]!==undefined) phaseCount[t.phase]++; });
+
+  let html = `<div class="tab-header">
+    <div class="tag-row"><span class="gdot" style="background:${g.dotColor}"></span><h2>${g.name}</h2></div>
+    <p class="role">${g.role}</p>
+  </div>
+  <div class="stats-row">
+    <span class="stat-pill sp0">P0: ${g.tasks.filter(t=>t.pri==='P0').length}</span>
+    <span class="stat-pill sp1">P1: ${g.tasks.filter(t=>t.pri==='P1').length}</span>
+    <span class="stat-pill sp2">P2: ${g.tasks.filter(t=>t.pri==='P2').length}</span>
+    <span class="stat-pill sph-f">框架期: ${phaseCount['框架期']||0}</span>
+    <span class="stat-pill sph-b">建设期: ${phaseCount['建设期']||0}</span>
+    <span class="stat-pill sph-l">落地期: ${phaseCount['落地期']||0}</span>
+    <button class="btn-expand" onclick="toggleAll(${idx})">展开/折叠全部</button>
+  </div>
+  <div class="cards">`;
+
+  g.tasks.forEach((t,i)=>{
+    html += `<div class="card" id="card-${idx}-${i}">
+      <div class="card-row" onclick="this.parentElement.classList.toggle('open')">
+        <span class="pri pri${t.pri==='P0'?0:(t.pri==='P1'?1:2)}">${t.pri}</span>
+        <span class="phase-tag ${phaseTagClass(t.phase)}">${phaseLabel(t.phase)}</span>
+        <span class="title">${t.title}</span>
+        <span class="out ${outClass(t.out)}">${t.out}</span>
+        <span class="dl">${absMonth(t.mo)}</span>
+        <span class="arrow">&#9660;</span>
+      </div>
+      <div class="card-body">
+        <p class="desc">${t.desc}</p>
+        <div class="xtags"><span>📦 ${t.deliverable}</span><span>🤝 ${t.collab}</span></div>
+      </div>
+    </div>`;
+  });
+  html += '</div>';
+  document.getElementById('mainContent').innerHTML = html;
+  activeGroup = idx;
+  document.querySelectorAll('#groupNav a').forEach((a,i)=>a.classList.toggle('active', i===idx));
+}
+
+function toggleAll(idx) {
+  const g = groups[idx];
+  g.tasks.forEach((_,i)=>{
+    document.getElementById(`card-${idx}-${i}`).classList.toggle('open');
+  });
+}
+
+document.getElementById('groupNav').addEventListener('click', function(e) {
+  e.preventDefault();
+  const a = e.target.closest('a');
+  if (!a) return;
+  renderGroup(parseInt(a.dataset.group));
+});
+
+// ═══ MINDMAP ═══
+function renderMindmap() {
+  let html = '<ul>';
+
+  // Root
+  html += `<li><div class="tn tn-root"><span class="tn-dot"></span><span class="tn-label">鲲鹏IP品牌落地</span><span class="tn-note">18个月 · 8组 · 34项任务</span></div>`;
+  html += '<div class="tb"><ul>';
+
+  groups.forEach((g,gi) => {
+    const phaseGroups = {框架期:[],建设期:[],落地期:[]};
+    g.tasks.forEach(t=>phaseGroups[t.phase].push(t));
+
+    html += `<li>`;
+    html += `<div class="tn" onclick="toggleTree(this)"><span class="toggle">+</span>`;
+    html += `<span class="gbox" style="background:${g.color};color:#333;font-size:0.85rem;">${g.name}</span>`;
+    html += `<span class="tn-note">${g.tasks.length}项任务</span></div>`;
+    html += '<div class="children"><div class="tb"><ul>';
+
+    // Role line
+    html += `<li><div class="tn"><span class="tn-note">📌 ${g.role.split('·')[0].trim()}</span></div></li>`;
+
+    // By phase
+    Object.entries(phaseGroups).forEach(([phase, tasks]) => {
+      if (tasks.length===0) return;
+      const pTag = phase==='框架期'?'sph-f':(phase==='建设期'?'sph-b':'sph-l');
+      html += `<li><div class="tn" onclick="toggleTree(this)"><span class="toggle">+</span>`;
+      html += `<span class="stat-pill ${pTag}" style="font-size:0.78rem;">${phaseLabel(phase)}期 · ${tasks.length}项</span></div>`;
+      html += '<div class="children"><div class="tb"><ul>';
+      tasks.forEach(t=>{
+        const pc=t.pri==='P0'?'lp0':(t.pri==='P1'?'lp1':'lp2');
+        html += `<li><span class="leaf"><span class="lp ${pc}"></span>${t.title}<span class="ld">${absMonth(t.mo)}</span></span></li>`;
+      });
+      html += '</ul></div></div></li>';
+    });
+
+    html += '</ul></div></div></li>';
+  });
+
+  html += '</ul></div></li></ul>';
+  document.getElementById('treeContainer').innerHTML = html;
+}
+
+function toggleTree(el) {
+  el.classList.toggle('open');
+  const children = el.nextElementSibling;
+  if (children && children.classList.contains('children')) {
+    children.classList.toggle('show');
+  }
+  const tg = el.querySelector('.toggle');
+  if (tg) tg.textContent = el.classList.contains('open') ? '−' : '+';
+}
+
+function expandAll() {
+  document.querySelectorAll('.tree .tn').forEach(el=>{
+    el.classList.add('open');
+    const tg = el.querySelector('.toggle');
+    if (tg) tg.textContent = '−';
+  });
+  document.querySelectorAll('.tree .children').forEach(el=>el.classList.add('show'));
+}
+
+// ═══ INIT ═══
+renderGroup(0);
+</script>
+
+</body>
+</html>
