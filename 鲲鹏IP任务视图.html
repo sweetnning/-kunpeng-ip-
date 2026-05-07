@@ -179,7 +179,9 @@
     .sidebar .group-nav { display: flex; overflow-x: auto; gap: 2px; }
     .sidebar .group-nav li a { border-left: none; border-bottom: 2px solid transparent; white-space: nowrap; padding: 8px 10px; font-size: 0.74rem; }
     .sidebar .group-nav li a.active { border-left: none; border-bottom-color: #d4a84b; }
-    .sidebar .sb-header, .sidebar .sb-footer { display: none; }
+    .sidebar .sb-header, .sidebar .sb-footer { display: flex; }
+    .sidebar .sb-footer { justify-content: center; }
+    .sidebar .sb-header .sb-title { font-size: 0.78rem; }
     .main { padding: 18px 14px; }
     .cover h1 { font-size: 1.4rem; }
     .cover .nav-cards { flex-direction: column; align-items: center; }
