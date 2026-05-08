@@ -190,25 +190,23 @@
   .tl-legend span { display:flex; align-items:center; gap:4px; }
   .tldot { width:8px; height:8px; border-radius:50%; display:inline-block; }
   .tld-l { background:var(--red); } .tld-b { background:var(--amber); } .tld-g { background:var(--green); }
-  .timeline { position:relative; padding-left:48px; max-width:800px; margin:0 auto; }
-  .timeline::before { content:''; position:absolute; left:16px; top:0; bottom:0; width:4px; border-radius:2px; background:linear-gradient(to bottom,#c0392b 0%,#c0392b 25%,#b8860b 25%,#b8860b 60%,#507050 60%,#507050 100%); }
-  .tl-month { margin-bottom:16px; position:relative; }
-  .tl-month::before { content:''; position:absolute; left:-36px; top:8px; width:12px; height:12px; border-radius:50%; border:3px solid #fff; z-index:2; }
-  .tl-month.frame::before { box-shadow:0 0 0 3px #c0392b; background:#c0392b; }
-  .tl-month.build::before { box-shadow:0 0 0 3px #b8860b; background:#b8860b; }
-  .tl-month.launch::before { box-shadow:0 0 0 3px #507050; background:#507050; }
-  .tl-month .tm-h { display:flex; align-items:center; gap:8px; margin-bottom:3px; position:relative; }
-  .tl-month .tm-h .tm-mo { font-weight:700; font-size:0.95rem; }
-  .tl-month .tm-body { font-size:0.84rem; color:#666; line-height:1.6; }
-  .tl-phase { padding:8px 0 8px 48px; margin:4px 0; font-weight:700; font-size:0.82rem; position:relative; z-index:1; }
-  .tl-phase span { padding:5px 16px; border-radius:50px; }
-  .tl-phase.f span { background:#fce4e4; color:var(--red); }
-  .tl-phase.b span { background:#fef5e7; color:var(--amber); }
-  .tl-phase.l span { background:#eaf7ea; color:var(--green); }
-  .tl-phase::before { content:''; position:absolute; left:10px; top:50%; width:16px; height:16px; border-radius:50%; border:3px solid #fff; z-index:2; transform:translateY(-50%); }
-  .tl-phase.f::before { background:#c0392b; box-shadow:0 0 0 3px #c0392b; }
-  .tl-phase.b::before { background:#b8860b; box-shadow:0 0 0 3px #b8860b; }
-  .tl-phase.l::before { background:#507050; box-shadow:0 0 0 3px #507050; }
+  .timeline { max-width:820px; margin:0 auto; }
+  .tl-seg { border-radius:10px; padding:16px 24px; margin-bottom:8px; }
+  .tl-seg.frame { background:#fdf2f2; border-left:4px solid #c0392b; }
+  .tl-seg.build { background:#fefaf2; border-left:4px solid #b8860b; }
+  .tl-seg.launch { background:#f2f7f2; border-left:4px solid #507050; }
+  .tl-month { margin-bottom:10px; }
+  .tl-month:last-child { margin-bottom:0; }
+  .tl-month .tm-h { display:flex; align-items:center; gap:8px; margin-bottom:2px; }
+  .tl-month .tm-h .tm-mo { font-weight:700; font-size:0.92rem;font-weight:800; }
+  .tl-month .tm-body { font-size:0.83rem; color:#666; line-height:1.6; }
+  .tm-hl { color:#c0392b; font-weight:600; }
+  .tm-ms { color:#b8860b; font-weight:600; }
+  .tl-phase { text-align:center; padding:0 0 12px 0; font-weight:800; font-size:0.95rem; }
+  .tl-phase span { padding:6px 24px; border-radius:50px; }
+  .tl-phase.f span { background:#c0392b; color:#fff; }
+  .tl-phase.b span { background:#b8860b; color:#fff; }
+  .tl-phase.l span { background:#507050; color:#fff; }
   .tl-month .tm-h { display:flex; align-items:center; gap:8px; margin-bottom:3px; }
   .tl-month .tm-h .tm-mo { font-weight:700; font-size:0.92rem; }
   .tl-month .tm-body { font-size:0.84rem; color:#666; line-height:1.6; }
@@ -288,19 +286,24 @@
     <span><span class="tldot tld-g"></span> 落地期 2027.03-10</span>
   </div>
   <div class="timeline">
-    <div class="tl-seg frame"><div class="tl-phase f"><span>框架期 · 内部对齐</span></div>
+    <div class="tl-seg frame">
+    <div class="tl-phase f"><span>框架期 · 内部对齐 · 2026.05 — 08</span></div>
     <div class="tl-month frame"><div class="tm-h"><span class="tm-mo">2026.05</span></div><div class="tm-body">品牌定位内部调研启动 · 全馆勘查开启 · 三份申报材料启动 · <span class="tm-hl">🔴 项目启动审批</span></div></div>
     <div class="tl-month frame"><div class="tm-h"><span class="tm-mo">2026.06</span></div><div class="tm-body">品牌定位白皮书初稿 · 话语体系框架搭建 · 世界观编剧招标 · <span class="tm-hl">🔴 定位白皮书组领导审</span></div></div>
     <div class="tl-month frame"><div class="tm-h"><span class="tm-mo">2026.07</span></div><div class="tm-body"><span class="tm-ms">🟢 品牌定位白皮书馆领导签批</span> · 治理架构图定稿 · <span class="tm-hl">🔴 申报材料正式提交 · VI招标发出</span></div></div>
     <div class="tl-month frame"><div class="tm-h"><span class="tm-mo">2026.08</span></div><div class="tm-body"><span class="tm-ms">🟢 框架期交付包汇总</span> · 世界观框架白皮书定稿 · 话语体系全馆宣贯 · <span class="tm-hl">⚠️ 空间运营开发部归口确认</span></div></div>
-    </div><div class="tl-seg build"><div class="tl-phase b"><span>建设期 · 外包执行</span></div>
+    </div>
+<div class="tl-seg build">
+    <div class="tl-phase b"><span>建设期 · 外包执行 · 2026.09 — 2027.02</span></div>
     <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2026.09</span></div><div class="tm-body">VI设计公司定标 · 场馆空间设计招标 · 服装设计招标 · 课程开发启动 · <span class="tm-hl">🔴 VI / 场馆设计 / 服装定标</span></div></div>
     <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2026.10</span></div><div class="tm-body">VI初稿评审 · 世界观初稿评审 · 课程初稿评审 · 商标第二批提交 · 品牌总监入职</div></div>
     <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2026.11</span></div><div class="tm-body"><span class="tm-ms">🟢 VI系统交付</span> · 场馆设计终审 · 动画公司定标 · 服装设计终审</div></div>
     <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2026.12</span></div><div class="tm-body"><span class="tm-ms">🟢 世界观定稿 · 服务手册签批 · 课程体系终审 · 首批专家签约≥10位</span></div></div>
     <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2027.01</span></div><div class="tm-body">主题图库交付 · 场景规范定稿 · 物料设计启动 · <span class="tm-ms">🟢 首场鲲鹏科学讲坛举办</span></div></div>
     <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2027.02</span></div><div class="tm-body"><span class="tm-ms">🟢 建设期交付包汇总</span> · 动画初剪评审 · 物料打样签批 · 服装样衣确认 · 产品投产确认</div></div>
-    </div><div class="tl-seg launch"><div class="tl-phase l"><span>落地期 · 场馆呈现</span></div>
+    </div>
+<div class="tl-seg launch">
+    <div class="tl-phase l"><span>落地期 · 场馆呈现 · 2027.03 — 10</span></div>
     <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.03</span></div><div class="tm-body"><span class="tm-ms">🟢 动画成片+表情包正式发布 · 鲲鹏日志专栏首发</span> · 首批物料进场 · 鲲鹏学院首期内测</div></div>
     <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.04</span></div><div class="tm-body">全员品牌角色培训考核 · 第二批物料进场 · <span class="tm-ms">🟢 产品正式销售</span></div></div>
     <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.05-06</span></div><div class="tm-body">全馆物料安装推进 · 服务品牌化全面运转 · 学院正式开课 · AI大赛执行 · <span class="tm-hl">🔴 全馆品牌空间初验</span></div></div>
@@ -314,7 +317,7 @@
   <div class="pl-header">
     <button class="pl-back-btn" onclick="showCover()">← 返回扉页</button>
     <h2 id="plTitle"></h2>
-    <span id="plCount" style="color:var(--muted);font-size:0.9rem;"></span>
+    <span id="plCount" style="color:var(--muted);font-size:0.92rem;font-weight:800;"></span>
   </div>
   <div class="pl-list" id="plList"></div>
 </div>
