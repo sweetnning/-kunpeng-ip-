@@ -180,6 +180,46 @@
     color: #d4a84b; border: none; cursor: pointer; font-size: 1.1rem;
     box-shadow: 0 4px 16px rgba(0,0,0,.2); align-items: center; justify-content: center;
   }
+  /* ═══ TIMELINE PAGE ═══ */
+  .timeline-page { display:none; min-height:100vh; background:var(--bg); padding:32px; }
+  .timeline-page.active { display:block; }
+  .tl-header { max-width:800px; margin:0 auto 24px; display:flex; align-items:center; gap:14px; }
+  .tl-back { padding:8px 18px; border-radius:50px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:0.85rem; font-family:inherit; }
+  .tl-back:hover { background:#f0f0f0; }
+  .tl-legend { display:flex; gap:16px; margin-bottom:24px; font-size:0.78rem; color:var(--muted); justify-content:center; }
+  .tl-legend span { display:flex; align-items:center; gap:4px; }
+  .tldot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+  .tld-l { background:var(--red); } .tld-b { background:var(--amber); } .tld-g { background:var(--green); }
+  .timeline { position:relative; padding-left:48px; max-width:800px; margin:0 auto; }
+  .timeline::before { content:''; position:absolute; left:16px; top:0; bottom:0; width:4px; border-radius:2px; background:linear-gradient(to bottom,#c0392b 0%,#c0392b 25%,#b8860b 25%,#b8860b 60%,#507050 60%,#507050 100%); }
+  .tl-month { margin-bottom:16px; position:relative; }
+  .tl-month::before { content:''; position:absolute; left:-36px; top:8px; width:12px; height:12px; border-radius:50%; border:3px solid #fff; z-index:2; }
+  .tl-month.frame::before { box-shadow:0 0 0 3px #c0392b; background:#c0392b; }
+  .tl-month.build::before { box-shadow:0 0 0 3px #b8860b; background:#b8860b; }
+  .tl-month.launch::before { box-shadow:0 0 0 3px #507050; background:#507050; }
+  .tl-month .tm-h { display:flex; align-items:center; gap:8px; margin-bottom:3px; position:relative; }
+  .tl-month .tm-h .tm-mo { font-weight:700; font-size:0.95rem; }
+  .tl-month .tm-body { font-size:0.84rem; color:#666; line-height:1.6; }
+  .tl-phase { padding:8px 0 8px 48px; margin:4px 0; font-weight:700; font-size:0.82rem; position:relative; z-index:1; }
+  .tl-phase span { padding:5px 16px; border-radius:50px; }
+  .tl-phase.f span { background:#fce4e4; color:var(--red); }
+  .tl-phase.b span { background:#fef5e7; color:var(--amber); }
+  .tl-phase.l span { background:#eaf7ea; color:var(--green); }
+  .tl-phase::before { content:''; position:absolute; left:10px; top:50%; width:16px; height:16px; border-radius:50%; border:3px solid #fff; z-index:2; transform:translateY(-50%); }
+  .tl-phase.f::before { background:var(--red); box-shadow:0 0 0 3px var(--red); }
+  .tl-phase.b::before { background:var(--amber); box-shadow:0 0 0 3px var(--amber); }
+  .tl-phase.l::before { background:var(--green); box-shadow:0 0 0 3px var(--green); }
+  .tl-month .tm-h { display:flex; align-items:center; gap:8px; margin-bottom:3px; }
+  .tl-month .tm-h .tm-mo { font-weight:700; font-size:0.92rem; }
+  .tl-month .tm-body { font-size:0.84rem; color:#666; line-height:1.6; }
+  .tm-hl { color:var(--red); font-weight:600; }
+  .tm-ms { color:var(--amber); font-weight:600; }
+  .tl-phase { text-align:center; padding:10px 0; margin:6px 0; font-weight:700; font-size:0.88rem; position:relative; z-index:1; }
+  .tl-phase span { padding:6px 20px; border-radius:50px; }
+  .tl-phase.f span { background:#fce4e4; color:var(--red); }
+  .tl-phase.b span { background:#fef5e7; color:var(--amber); }
+  .tl-phase.l span { background:#eaf7ea; color:var(--green); }
+
   @media (max-width: 768px) {
     .mobile-home { display: flex; }
     .app { flex-direction: column; }
@@ -210,6 +250,11 @@
       <h3>分组任务卡片</h3>
       <p>8个工作组详细任务清单，含优先级、截止日期、交付物、协作关系。点击卡片展开详情。</p>
     </div>
+    <div class="nav-card" onclick="showTimeline()">
+      <div class="nc-icon">📅</div>
+      <h3>项目主时间线</h3>
+      <p>18个月三阶段：框架期→建设期→落地期。标注全部审批节点、里程碑和交付物。</p>
+    </div>
     <div class="nav-card" onclick="showMindmap()">
       <div class="nc-icon">🗺</div>
       <h3>项目全景导图</h3>
@@ -222,12 +267,73 @@
     </a>
   </div>
   <div class="stats-line">
-    <span class="stat-badge" style="background:#fce4e4;color:#c0392b;cursor:pointer" onclick="showApp('P0')" title="点击查看全部P0紧急事项">P0 紧急 · 10项</span>
-    <span class="stat-badge" style="background:#fef5e7;color:#b48c0b;cursor:pointer" onclick="showApp('P1')" title="点击查看全部P1重要事项">P1 重要 · 16项</span>
-    <span class="stat-badge" style="background:#eaf7ea;color:#2e7d32;cursor:pointer" onclick="showApp('P2')" title="点击查看全部P2常规事项">P2 常规 · 8项</span>
+    <span class="stat-badge" style="background:#fce4e4;color:#c0392b;cursor:pointer" onclick="showApp('P0')" title="只看P0紧急事项">P0 紧急 · 10项</span>
+    <span class="stat-badge" style="background:#fef5e7;color:#b48c0b;cursor:pointer" onclick="showApp('P1')" title="只看P1重要事项">P1 重要 · 16项</span>
+    <span class="stat-badge" style="background:#eaf7ea;color:#2e7d32;cursor:pointer" onclick="showApp('P2')" title="只看P2常规事项">P2 常规 · 8项</span>
     <span class="stat-badge" style="background:#fff;">📅 2026.05 — 2027.10</span>
   </div>
 </div>
+
+
+
+<!-- ═══════════ TIMELINE PAGE ═══════════ -->
+<div class="timeline-page" id="timelinePage">
+  <div class="tl-header">
+    <button class="tl-back" onclick="showCover()">← 返回扉页</button>
+    <h2 style="font-size:1.2rem;">鲲鹏IP · 项目主时间线</h2>
+  </div>
+  <div class="tl-legend">
+    <span><span class="tldot tld-l"></span> 框架期 2026.05-08</span>
+    <span><span class="tldot tld-b"></span> 建设期 2026.09-2027.02</span>
+    <span><span class="tldot tld-g"></span> 落地期 2027.03-10</span>
+  </div>
+  <div class="timeline">
+    <div class="tl-seg frame"><div class="tl-phase f"><span>框架期 · 内部对齐</span></div>
+    <div class="tl-month frame"><div class="tm-h"><span class="tm-mo">2026.05</span></div><div class="tm-body">品牌定位内部调研启动 · 全馆勘查开启 · 三份申报材料启动 · <span class="tm-hl">🔴 项目启动审批</span></div></div>
+    <div class="tl-month frame"><div class="tm-h"><span class="tm-mo">2026.06</span></div><div class="tm-body">品牌定位白皮书初稿 · 话语体系框架搭建 · 世界观编剧招标 · <span class="tm-hl">🔴 定位白皮书组领导审</span></div></div>
+    <div class="tl-month frame"><div class="tm-h"><span class="tm-mo">2026.07</span></div><div class="tm-body"><span class="tm-ms">🟢 品牌定位白皮书馆领导签批</span> · 治理架构图定稿 · <span class="tm-hl">🔴 申报材料正式提交 · VI招标发出</span></div></div>
+    <div class="tl-month frame"><div class="tm-h"><span class="tm-mo">2026.08</span></div><div class="tm-body"><span class="tm-ms">🟢 框架期交付包汇总</span> · 世界观框架白皮书定稿 · 话语体系全馆宣贯 · <span class="tm-hl">⚠️ 空间运营开发部归口确认</span></div></div>
+    </div><div class="tl-seg build"><div class="tl-phase b"><span>建设期 · 外包执行</span></div>
+    <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2026.09</span></div><div class="tm-body">VI设计公司定标 · 场馆空间设计招标 · 服装设计招标 · 课程开发启动 · <span class="tm-hl">🔴 VI / 场馆设计 / 服装定标</span></div></div>
+    <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2026.10</span></div><div class="tm-body">VI初稿评审 · 世界观初稿评审 · 课程初稿评审 · 商标第二批提交 · 品牌总监入职</div></div>
+    <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2026.11</span></div><div class="tm-body"><span class="tm-ms">🟢 VI系统交付</span> · 场馆设计终审 · 动画公司定标 · 服装设计终审</div></div>
+    <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2026.12</span></div><div class="tm-body"><span class="tm-ms">🟢 世界观定稿 · 服务手册签批 · 课程体系终审 · 首批专家签约≥10位</span></div></div>
+    <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2027.01</span></div><div class="tm-body">主题图库交付 · 场景规范定稿 · 物料设计启动 · <span class="tm-ms">🟢 首场鲲鹏科学讲坛举办</span></div></div>
+    <div class="tl-month build"><div class="tm-h"><span class="tm-mo">2027.02</span></div><div class="tm-body"><span class="tm-ms">🟢 建设期交付包汇总</span> · 动画初剪评审 · 物料打样签批 · 服装样衣确认 · 产品投产确认</div></div>
+    </div><div class="tl-seg launch"><div class="tl-phase l"><span>落地期 · 场馆呈现</span></div>
+    <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.03</span></div><div class="tm-body"><span class="tm-ms">🟢 动画成片+表情包正式发布 · 鲲鹏日志专栏首发</span> · 首批物料进场 · 鲲鹏学院首期内测</div></div>
+    <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.04</span></div><div class="tm-body">全员品牌角色培训考核 · 第二批物料进场 · <span class="tm-ms">🟢 产品正式销售</span></div></div>
+    <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.05-06</span></div><div class="tm-body">全馆物料安装推进 · 服务品牌化全面运转 · 学院正式开课 · AI大赛执行 · <span class="tm-hl">🔴 全馆品牌空间初验</span></div></div>
+    <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.07-08</span></div><div class="tm-body"><span class="tm-ms">🟢 全馆品牌空间终验</span> · 产品渠道全面运营 · 机场店开业 · 年度动画制作 · Year2战略启动</div></div>
+    <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.09</span></div><div class="tm-body">品牌之夜最终筹备 · 年度品牌报告编制 · 联名计划官宣 · <span class="tm-hl">🔴 Year2战略+预算签批</span></div></div>
+    <div class="tl-month launch"><div class="tm-h"><span class="tm-mo">2027.10</span></div><div class="tm-body"><span class="tm-ms">🎯 鲲鹏品牌之夜年度发布会</span> · 年度动画首映 · 品牌审计报告 · Year2战略签批 · 首年成果汇总</div></div></div></div>
+</div>
+
+<!-- ═══════════ PRIORITY LIST PAGE ═══════════ -->
+<div class="priority-page" id="priorityPage">
+  <div class="pl-header">
+    <button class="pl-back-btn" onclick="showCover()">← 返回扉页</button>
+    <h2 id="plTitle"></h2>
+    <span id="plCount" style="color:var(--muted);font-size:0.9rem;"></span>
+  </div>
+  <div class="pl-list" id="plList"></div>
+</div>
+<style>
+.priority-page { display:none; min-height:100vh; background:var(--bg); padding:32px; }
+.priority-page.active { display:block; }
+.pl-header { max-width:720px; margin:0 auto 24px; display:flex; align-items:center; gap:14px; }
+.pl-back-btn { padding:8px 18px; border-radius:50px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:0.85rem; font-family:inherit; }
+.pl-back-btn:hover { background:#f0f0f0; }
+.pl-list { max-width:720px; margin:0 auto; display:flex; flex-direction:column; gap:6px; }
+.pl-item { display:flex; align-items:center; padding:10px 18px; background:#fff; border-radius:8px; gap:12px; box-shadow:0 1px 3px rgba(0,0,0,.03); font-size:0.88rem; transition:.1s; }
+.pl-item:hover { box-shadow:0 2px 6px rgba(0,0,0,.06); }
+.pl-item .pl-num { width:28px; height:28px; border-radius:50%; text-align:center; line-height:28px; font-size:0.78rem; font-weight:700; background:#f5f5f5; color:#999; flex-shrink:0; }
+.pl-item .pl-group { font-size:0.72rem; font-weight:600; padding:2px 8px; border-radius:50px; flex-shrink:0; }
+.pl-item .pl-name { flex:1; font-weight:500; }
+.pl-item .pl-dl { font-size:0.8rem; color:#999; flex-shrink:0; }
+.pl-item .pl-pri { font-size:0.72rem; font-weight:700; padding:2px 8px; border-radius:50px; flex-shrink:0; }
+.pri-badge-P0 { background:#fce4e4; color:#c0392b; } .pri-badge-P1 { background:#fef5e7; color:#b48c0b; } .pri-badge-P2 { background:#eaf7ea; color:#2e7d32; }
+</style>
 
 <!-- ═══════════ APP (TASK CARDS) ═══════════ -->
 <div class="app" id="appView">
@@ -253,6 +359,7 @@
       <span>返回扉页</span>
     </div>
   </nav>
+  <div id="filterBar" style="max-width:840px;"></div>
   <main class="main" id="mainContent"></main>
 </div>
 
@@ -347,11 +454,21 @@ const phaseTagClass = p => p==='框架期'?'ph-tag-f':(p==='建设期'?'ph-tag-b
 const outClass = o => o==='自做'?'out-self':(o==='外包'?'out-outsource':'out-mix');
 
 // ═══ COVER NAVIGATION ═══
-function showApp(filter) { if (filter) { priorityFilter = filter; } else { priorityFilter = null; }
+function showApp(filter) {
+  if (filter) { showPriorityList(filter); return; }
+  priorityFilter = null;
   document.getElementById('coverPage').classList.add('hidden');
   document.getElementById('appView').classList.add('active');
   document.getElementById('mindmapPage').classList.remove('active');
   renderGroup(activeGroup);
+}
+function showTimeline() {
+  document.getElementById('coverPage').classList.add('hidden');
+  document.getElementById('appView').classList.remove('active');
+  document.getElementById('mindmapPage').classList.remove('active');
+  document.getElementById('priorityPage').classList.remove('active');
+  document.getElementById('timelinePage').classList.remove('active');
+  document.getElementById('timelinePage').classList.add('active');
 }
 function showMindmap() {
   document.getElementById('coverPage').classList.add('hidden');
@@ -359,29 +476,64 @@ function showMindmap() {
   document.getElementById('mindmapPage').classList.add('active');
   renderMindmap();
 }
+function showPriorityList(pri) {
+  document.getElementById('coverPage').classList.add('hidden');
+  document.getElementById('appView').classList.remove('active');
+  document.getElementById('mindmapPage').classList.remove('active');
+  const pp = document.getElementById('priorityPage');
+  pp.classList.add('active');
+
+  const allTasks = [];
+  groups.forEach(g => {
+    g.tasks.filter(t => t.pri === pri).forEach(t => {
+      allTasks.push({...t, group: g.name, groupColor: g.color, groupText: g.dotColor});
+    });
+  });
+  allTasks.sort((a,b) => a.mo - b.mo);
+
+  const labels = {P0:'紧急', P1:'重要', P2:'常规'};
+  document.getElementById('plTitle').textContent = 'P' + pri.slice(1) + ' ' + labels[pri] + '事项';
+  document.getElementById('plCount').textContent = '共 ' + allTasks.length + ' 项';
+
+  let html = '';
+  allTasks.forEach((t,i) => {
+    html += '<div class="pl-item"><span class="pl-num">'+(i+1)+'</span><span class="pl-group" style="background:'+t.groupColor+';color:'+t.groupText+'">'+t.group.replace('组','')+'</span><span class="pl-name">'+t.title+'</span><span class="pl-dl">'+absMonth(t.mo)+'</span><span class="pl-pri pri-badge-'+t.pri+'">'+t.pri+'</span></div>';
+  });
+  document.getElementById('plList').innerHTML = html || '<p style="color:var(--muted);text-align:center;padding:40px;">暂无' + pri + '级事项</p>';
+}
+
 function showCover() {
   document.getElementById('coverPage').classList.remove('hidden');
   document.getElementById('appView').classList.remove('active');
   document.getElementById('mindmapPage').classList.remove('active');
+  document.getElementById('priorityPage').classList.remove('active');
+  document.getElementById('timelinePage').classList.remove('active');
 }
 
 // ═══ TASK CARDS ═══
-let activeGroup = 0; let priorityFilter = null;
+let activeGroup = 0, priorityFilter = null;
 
 function renderGroup(idx) {
   const g = groups[idx];
   const phaseCount = {框架期:0,建设期:0,落地期:0};
   g.tasks.forEach(t=>{ if(phaseCount[t.phase]!==undefined) phaseCount[t.phase]++; });
-  const filteredTasks = priorityFilter ? g.tasks.filter(t => t.pri === priorityFilter) : g.tasks;
 
-  let filterBar = '';
-  if (priorityFilter) {
-    filterBar = '<div style="background:#fff8e1;border-radius:8px;padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;font-size:0.85rem;"><span style="font-weight:700;color:#c0392b;">🔍 已筛选: '+priorityFilter+'级</span><span style="color:#888;">共 '+filteredTasks.length+' 项</span><button class="btn-expand" onclick="filterBy(null)" style="margin-left:auto;">显示全部</button><button class="btn-expand" onclick="showCover()">← 扉页</button></div>';
-  }
+  let html = `<div class="tab-header">
+    <div class="tag-row"><span class="gdot" style="background:${g.dotColor}"></span><h2>${g.name}</h2></div>
+    <p class="role">${g.role}</p>
+  </div>
+  <div class="stats-row">
+    <span class="stat-pill sp0" style="cursor:pointer" onclick="filterBy('P0')" title="只看P0">P0: ${g.tasks.filter(t=>t.pri==='P0').length}</span>
+    <span class="stat-pill sp1" style="cursor:pointer" onclick="filterBy('P1')" title="只看P1">P1: ${g.tasks.filter(t=>t.pri==='P1').length}</span>
+    <span class="stat-pill sp2" style="cursor:pointer" onclick="filterBy('P2')" title="只看P2">P2: ${g.tasks.filter(t=>t.pri==='P2').length}</span>
+    <span class="stat-pill sph-f">框架期: ${phaseCount['框架期']||0}</span>
+    <span class="stat-pill sph-b">建设期: ${phaseCount['建设期']||0}</span>
+    <span class="stat-pill sph-l">落地期: ${phaseCount['落地期']||0}</span>
+    <button class="btn-expand" onclick="toggleAll(${idx})">展开/折叠全部</button>
+  </div>
+  <div class="cards">`;
 
-  let html = '<div class="tab-header"><div class="tag-row"><span class="gdot" style="background:'+g.dotColor+'"></span><h2>'+g.name+'</h2></div><p class="role">'+g.role+'</p></div>'+filterBar+'<div class="stats-row"><span class="stat-pill sp0" style="cursor:pointer" onclick="filterBy('P0')" title="只看P0">P0: '+g.tasks.filter(function(t){return t.pri==="P0"}).length+'</span><span class="stat-pill sp1" style="cursor:pointer" onclick="filterBy('P1')" title="只看P1">P1: '+g.tasks.filter(function(t){return t.pri==="P1"}).length+'</span><span class="stat-pill sp2" style="cursor:pointer" onclick="filterBy('P2')" title="只看P2">P2: '+g.tasks.filter(function(t){return t.pri==="P2"}).length+'</span><span class="stat-pill sph-f">框架期: '+(phaseCount['框架期']||0)+'</span><span class="stat-pill sph-b">建设期: '+(phaseCount['建设期']||0)+'</span><span class="stat-pill sph-l">落地期: '+(phaseCount['落地期']||0)+'</span><button class="btn-expand" onclick="toggleAll('+idx+')">展开/折叠全部</button></div><div class="cards">';
-
-  filteredTasks.forEach((t,i)=>{
+  g.tasks.forEach((t,i)=>{
     html += `<div class="card" id="card-${idx}-${i}">
       <div class="card-row" onclick="this.parentElement.classList.toggle('open')">
         <span class="pri pri${t.pri==='P0'?0:(t.pri==='P1'?1:2)}">${t.pri}</span>
@@ -401,11 +553,37 @@ function renderGroup(idx) {
   document.getElementById('mainContent').innerHTML = html;
   activeGroup = idx;
   document.querySelectorAll('#groupNav a').forEach((a,i)=>a.classList.toggle('active', i===idx));
+  applyFilter(); // hide non-matching cards if filter active
+  updateFilterBar(); // show/hide filter indicator
 }
 
 function filterBy(pri) {
   priorityFilter = pri;
   renderGroup(activeGroup);
+}
+function applyFilter() {
+  if (!priorityFilter) return;
+  const cards = document.querySelectorAll('#mainContent .card');
+  cards.forEach(card => {
+    const priEl = card.querySelector('.pri');
+    if (!priEl) return;
+    const pri = priEl.textContent.trim();
+    card.style.display = pri === priorityFilter ? '' : 'none';
+  });
+}
+function updateFilterBar() {
+  let bar = document.getElementById('filterBar');
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'filterBar';
+    bar.style.cssText = 'max-width:840px;margin:0 40px 0 0;';
+    const main = document.getElementById('mainContent');
+    main.parentNode.insertBefore(bar, main);
+  }
+  if (!priorityFilter) { bar.innerHTML = ''; return; }
+  const visible = document.querySelectorAll('#mainContent .card[style*=""]:not([style*="none"])').length ||
+    document.querySelectorAll('#mainContent .card:not([style])').length;
+  bar.innerHTML = '<div style="background:#fff8e1;border-radius:8px;padding:10px 16px;display:flex;align-items:center;gap:12px;font-size:0.85rem;margin-bottom:12px;"><span style="font-weight:700;color:#c0392b;">已筛选: '+priorityFilter+'级</span><span style="color:#888;">共约'+visible+'项</span><button class="btn-expand" onclick="filterBy(null)" style="margin-left:auto;">显示全部</button><button class="btn-expand" onclick="showCover()">扉页</button></div>';
 }
 function toggleAll(idx) {
   const g = groups[idx];
