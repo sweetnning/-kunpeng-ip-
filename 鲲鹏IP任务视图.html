@@ -222,9 +222,9 @@
     </a>
   </div>
   <div class="stats-line">
-    <span class="stat-badge" style="background:#fce4e4;color:#c0392b;">P0 紧急 · 10项</span>
-    <span class="stat-badge" style="background:#fef5e7;color:#b48c0b;">P1 重要 · 16项</span>
-    <span class="stat-badge" style="background:#eaf7ea;color:#2e7d32;">P2 常规 · 8项</span>
+    <span class="stat-badge" style="background:#fce4e4;color:#c0392b;cursor:pointer" onclick="showApp('P0')" title="点击查看全部P0紧急事项">P0 紧急 · 10项</span>
+    <span class="stat-badge" style="background:#fef5e7;color:#b48c0b;cursor:pointer" onclick="showApp('P1')" title="点击查看全部P1重要事项">P1 重要 · 16项</span>
+    <span class="stat-badge" style="background:#eaf7ea;color:#2e7d32;cursor:pointer" onclick="showApp('P2')" title="点击查看全部P2常规事项">P2 常规 · 8项</span>
     <span class="stat-badge" style="background:#fff;">📅 2026.05 — 2027.10</span>
   </div>
 </div>
@@ -347,7 +347,7 @@ const phaseTagClass = p => p==='框架期'?'ph-tag-f':(p==='建设期'?'ph-tag-b
 const outClass = o => o==='自做'?'out-self':(o==='外包'?'out-outsource':'out-mix');
 
 // ═══ COVER NAVIGATION ═══
-function showApp() {
+function showApp(filter) { if (filter) { priorityFilter = filter; } else { priorityFilter = null; }
   document.getElementById('coverPage').classList.add('hidden');
   document.getElementById('appView').classList.add('active');
   document.getElementById('mindmapPage').classList.remove('active');
@@ -366,29 +366,22 @@ function showCover() {
 }
 
 // ═══ TASK CARDS ═══
-let activeGroup = 0;
+let activeGroup = 0; let priorityFilter = null;
 
 function renderGroup(idx) {
   const g = groups[idx];
   const phaseCount = {框架期:0,建设期:0,落地期:0};
   g.tasks.forEach(t=>{ if(phaseCount[t.phase]!==undefined) phaseCount[t.phase]++; });
+  const filteredTasks = priorityFilter ? g.tasks.filter(t => t.pri === priorityFilter) : g.tasks;
 
-  let html = `<div class="tab-header">
-    <div class="tag-row"><span class="gdot" style="background:${g.dotColor}"></span><h2>${g.name}</h2></div>
-    <p class="role">${g.role}</p>
-  </div>
-  <div class="stats-row">
-    <span class="stat-pill sp0">P0: ${g.tasks.filter(t=>t.pri==='P0').length}</span>
-    <span class="stat-pill sp1">P1: ${g.tasks.filter(t=>t.pri==='P1').length}</span>
-    <span class="stat-pill sp2">P2: ${g.tasks.filter(t=>t.pri==='P2').length}</span>
-    <span class="stat-pill sph-f">框架期: ${phaseCount['框架期']||0}</span>
-    <span class="stat-pill sph-b">建设期: ${phaseCount['建设期']||0}</span>
-    <span class="stat-pill sph-l">落地期: ${phaseCount['落地期']||0}</span>
-    <button class="btn-expand" onclick="toggleAll(${idx})">展开/折叠全部</button>
-  </div>
-  <div class="cards">`;
+  let filterBar = '';
+  if (priorityFilter) {
+    filterBar = '<div style="background:#fff8e1;border-radius:8px;padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;font-size:0.85rem;"><span style="font-weight:700;color:#c0392b;">🔍 已筛选: '+priorityFilter+'级</span><span style="color:#888;">共 '+filteredTasks.length+' 项</span><button class="btn-expand" onclick="filterBy(null)" style="margin-left:auto;">显示全部</button><button class="btn-expand" onclick="showCover()">← 扉页</button></div>';
+  }
 
-  g.tasks.forEach((t,i)=>{
+  let html = '<div class="tab-header"><div class="tag-row"><span class="gdot" style="background:'+g.dotColor+'"></span><h2>'+g.name+'</h2></div><p class="role">'+g.role+'</p></div>'+filterBar+'<div class="stats-row"><span class="stat-pill sp0" style="cursor:pointer" onclick="filterBy('P0')" title="只看P0">P0: '+g.tasks.filter(function(t){return t.pri==="P0"}).length+'</span><span class="stat-pill sp1" style="cursor:pointer" onclick="filterBy('P1')" title="只看P1">P1: '+g.tasks.filter(function(t){return t.pri==="P1"}).length+'</span><span class="stat-pill sp2" style="cursor:pointer" onclick="filterBy('P2')" title="只看P2">P2: '+g.tasks.filter(function(t){return t.pri==="P2"}).length+'</span><span class="stat-pill sph-f">框架期: '+(phaseCount['框架期']||0)+'</span><span class="stat-pill sph-b">建设期: '+(phaseCount['建设期']||0)+'</span><span class="stat-pill sph-l">落地期: '+(phaseCount['落地期']||0)+'</span><button class="btn-expand" onclick="toggleAll('+idx+')">展开/折叠全部</button></div><div class="cards">';
+
+  filteredTasks.forEach((t,i)=>{
     html += `<div class="card" id="card-${idx}-${i}">
       <div class="card-row" onclick="this.parentElement.classList.toggle('open')">
         <span class="pri pri${t.pri==='P0'?0:(t.pri==='P1'?1:2)}">${t.pri}</span>
@@ -410,6 +403,10 @@ function renderGroup(idx) {
   document.querySelectorAll('#groupNav a').forEach((a,i)=>a.classList.toggle('active', i===idx));
 }
 
+function filterBy(pri) {
+  priorityFilter = pri;
+  renderGroup(activeGroup);
+}
 function toggleAll(idx) {
   const g = groups[idx];
   g.tasks.forEach((_,i)=>{
