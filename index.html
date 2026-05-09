@@ -117,6 +117,8 @@
   .cards { display: flex; flex-direction: column; gap: 10px; }
   .card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); cursor: pointer; transition: .12s; }
   .card:hover { box-shadow: 0 2px 6px rgba(0,0,0,.06); }
+  .card.leader-requested { border-left:4px solid #c0392b; background:#fffbfb; }
+  .card.leader-requested .card-row .title { font-weight:800; color:#c0392b; }
   .card-row { display: flex; align-items: center; padding: 14px 18px; gap: 10px; user-select: none; }
   .card-row .pri { width: 22px; height: 22px; border-radius: 50%; text-align: center; line-height: 22px; font-size: 9px; font-weight: 700; flex-shrink: 0; }
   .pri0 { background: var(--p0-bg); color: var(--p0-text); } .pri1 { background: var(--p1-bg); color: var(--p1-text); } .pri2 { background: var(--p2-bg); color: var(--p2-text); }
@@ -537,7 +539,7 @@ function renderGroup(idx) {
   <div class="cards">`;
 
   g.tasks.forEach((t,i)=>{
-    html += `<div class="card" id="card-${idx}-${i}">
+    html += `<div class="card${t.leader?' leader-requested':''}" id="card-${idx}-${i}">
       <div class="card-row" onclick="this.parentElement.classList.toggle('open')">
         <span class="pri pri${t.pri==='P0'?0:(t.pri==='P1'?1:2)}">${t.pri}</span>
         <span class="phase-tag ${phaseTagClass(t.phase)}">${phaseLabel(t.phase)}</span>
